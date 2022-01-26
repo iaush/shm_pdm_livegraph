@@ -1,0 +1,93 @@
+#messages {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding: 12px;
+    width:100%;
+    display: inline-block;
+    border:1px solid black;
+    max-height: 150px;
+    min-height: 150px;
+    overflow: scroll;
+    font-size: small;
+}
+
+
+#messages span {
+    overflow-y: scroll;
+    overflow: scroll;
+}
+
+input {
+    width : 150px;
+    margin: 10;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+}
+
+input[list=topic] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+}
+
+input[type=button] {
+    background-color: rgb(174, 215, 243);
+    border: none;
+    color: black;
+    padding: 16px 32px;
+    text-decoration: none;
+    font-weight: bold;
+    width : 20%;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+input[type=text]:focus {
+    background-color: lightblue;
+}
+
+input[list=topic]:focus {
+    background-color: rgb(231, 66, 16);
+}
+
+input[type=button]:hover {
+    background-color: #686868;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+}
+.wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+h2 {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.wrapper2 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(174, 215, 243);
+    border: none;
+    color: black;
+    padding: 16px 32px;
+    
+    font-weight: bold;
+    
+    width: 70%;
+    cursor: pointer;
+}
