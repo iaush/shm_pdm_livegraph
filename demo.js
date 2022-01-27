@@ -2,6 +2,8 @@ var names_dict={}
 var graph_names=[]
 var full_graph_names=[]
 
+num=0
+
 function startConnect() {
     // Generate a random client ID
     clientID = "clientID-" + parseInt(Math.random() * 100);
@@ -15,7 +17,7 @@ function startConnect() {
 
 
     // Initialize new Paho client connection
-    client = new Paho.MQTT.Client(host, 8080, clientID);
+    client = new Paho.MQTT.Client(host, 8000, clientID);
     // Set callback handlers
     client.onConnectionLost = onConnectionLost;
     client.onMessageArrived = onMessageArrived;
@@ -52,17 +54,18 @@ function onMessageArrived(message) {
     document.getElementById("messages").innerHTML += '<span>Topic: ' + message.destinationName + '  | ' + message.payloadString + '</span><br/>';
     
     i=document.getElementsByClassName('single_graphs')
-    num=0
+
     if (i.length>0){
         num+=1
-        message_json=JSON.parse(message.payloadString)
+        let message_json=JSON.parse(message.payloadString)
         for (let j=0,len=graph_names.length;j<len;j++){
-            //
-            console.log(full_graph_names[j])
-            console.log(message_json["Cylinder heating zone 3, actual value"])
-            //names_dict[graph_names[j]].push([message_json[full_graph_names[j]],num])
-            //console.log(message_json[full_graph_names[j]])
-            console.log(message_json)
+            //console.log(full_graph_names)
+            //console.log(full_graph_names[j])
+            //console.log(message_json['Cylinder heating zone 5, actual value'])
+            names_dict[graph_names[j]].push([num,message_json[full_graph_names[j].substring(1,full_graph_names[j].length-1)]])
+            //console.log(message_json[full_graph_names[j].substring(1,full_graph_names[j].length-1)])
+            //console.log(names_dict[graph_names[j]])
+            renderGraph(d3.select("#graph"+j), names_dict[graph_names[j]])
         }
    }
 }
@@ -80,16 +83,16 @@ function startgraphs(){
     //alert(found)
     //alert(text)
 
-    for(let i=0, len=found.length;i<len;i++){
-
-            document.getElementById("graphs").innerHTML += '<div class=single_graphs>'+found[i]+'</div><br/>'
-            names_dict[found[i].split(',')[0].substring(1)]=[]
-            //console.log(names_dict[found[i].split(',')[0].substring(1)])
-            graph_names.push(found[i].split(',')[0].substring(1))
-            full_graph_names.push(found[i])
-            //console.log(graph_names)
-            //document.getElementsByClassName("single_graphs").innerHTML += '<span>'+names_dict[found[i]]+'</span><br/>'
-            //this.getElementById('plot_graph') 
+    for(let i=0, len=found.length;i<len-1;i++){
+        document.getElementById("graphs").innerHTML += '<div class=single_graphs id=g'+i+'>'+found[i]+'</div><br/>'
+        names_dict[found[i].split(',')[0].substring(1)]=[]
+        //console.log(names_dict[found[i].split(',')[0].substring(1)])
+        graph_names.push(found[i].split(',')[0].substring(1))
+        full_graph_names.push(found[i])
+        //console.log(graph_names)
+        document.getElementById("g"+i).innerHTML += '<svg id=graph'+i+"></svg>"
+        setupGraph(d3.select("#graph"+i), "Graph", "Time", ""+found[i].split(',')[0].substring(1));
+        //this.getElementById('plot_graph') 
     }
 
     //for 
@@ -97,90 +100,10 @@ function startgraphs(){
     //console.log(i)
 }
 
-
-function graph_draw(width,height){
-
-    var dataset1 = [
-        [1,1], [12,20], [24,36],
-        [32, 50], [40, 70], [50, 100],
-        [55, 106], [65, 123], [73, 130],
-        [78, 134], [83, 136], [89, 138],
-        [100, 140]
-    ];
-
-    // Step 3
-    var svg = d3.select("svg"),
-        margin = 200,
-        width = svg.attr("width") - margin, //300
-        height = svg.attr("height") - margin //200
-
-    // Step 4 
-    var xScale = d3.scaleLinear().domain([0, 100]).range([0, width]),
-        yScale = d3.scaleLinear().domain([0, 200]).range([height, 0]);
-        
-    var g = svg.append("g")
-        .attr("transform", "translate(" + 100 + "," + 100 + ")");
-
-    // Step 5
-    // Title
-    svg.append('text')
-    .attr('x', width/2 + 100)
-    .attr('y', 100)
-    .attr('text-anchor', 'middle')
-    .style('font-family', 'Helvetica')
-    .style('font-size', 20)
-    .text('Line Chart');
-    
-    // X label
-    svg.append('text')
-    .attr('x', width/2 + 100)
-    .attr('y', height - 15 + 150)
-    .attr('text-anchor', 'middle')
-    .style('font-family', 'Helvetica')
-    .style('font-size', 12)
-    .text('Independant');
-    
-    // Y label
-    svg.append('text')
-    .attr('text-anchor', 'middle')
-    .attr('transform', 'translate(60,' + height + ')rotate(-90)')
-    .style('font-family', 'Helvetica')
-    .style('font-size', 12)
-    .text('Dependant');
-
-    // Step 6
-    g.append("g")
-     .attr("transform", "translate(0," + height + ")")
-     .call(d3.axisBottom(xScale));
-    
-    g.append("g")
-     .call(d3.axisLeft(yScale));
-    
-    // Step 7
-    svg.append('g')
-    .selectAll("dot")
-    .data(dataset1)
-    .enter()
-    .append("circle")
-    .attr("cx", function (d) { return xScale(d[0]); } )
-    .attr("cy", function (d) { return yScale(d[1]); } )
-    .attr("r", 3)
-    .attr("transform", "translate(" + 100 + "," + 100 + ")")
-    .style("fill", "#CC0000");
-
-    // Step 8        
-    var line = d3.line()
-    .x(function(d) { return xScale(d[0]); }) 
-    .y(function(d) { return yScale(d[1]); }) 
-    .curve(d3.curveMonotoneX)
-    
-    svg.append("path")
-    .datum(dataset1) 
-    .attr("class", "line") 
-    .attr("transform", "translate(" + 100 + "," + 100 + ")")
-    .attr("d", line)
-    .style("fill", "none")
-    .style("stroke", "#CC0000")
-    .style("stroke-width", "2");
-
-}
+// Whenever you update your dataset, call renderGraph() with the graph to update + updated dataset 
+// example update + renderGraph call
+//setInterval(function () {
+    //for (let j=0,len=graph_names.length;j<len;j++){
+  //renderGraph(d3.select("#graph"+j), names_dict[graph_names[j]]);
+  //}
+//}, 2000);
