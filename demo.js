@@ -2,7 +2,8 @@ var names_dict={}
 var graph_names=[]
 var full_graph_names=[]
 
-num=0
+let num=-1
+let least=0
 
 function startConnect() {
     // Generate a random client ID
@@ -65,6 +66,31 @@ function onMessageArrived(message) {
             names_dict[graph_names[j]].push([num,message_json[full_graph_names[j].substring(1,full_graph_names[j].length-1)]])
             //console.log(message_json[full_graph_names[j].substring(1,full_graph_names[j].length-1)])
             //console.log(names_dict[graph_names[j]])
+
+            ymax=[]
+            for (let h=0,len=names_dict[graph_names[j]].length;h<len;h++){
+                ymax.push(names_dict[graph_names[j]][h][1])
+                }
+            console.log(ymax)
+            yAxisMax=Math.max(...ymax)
+            console.log(Math.max(...ymax))
+            yScale = d3.scaleLinear().domain([0, yAxisMax]).range([innerHeight, 0]);
+            updateaxis(d3.select("#graph"+j))
+            
+
+
+        if (num > xAxisMax){
+            least+=1
+            xAxisMax += 1
+            xScale = d3.scaleLinear().domain([least, xAxisMax]).range([0, innerWidth]);
+                
+
+            for (let k=0,len=graph_names.length;k<len;k++){
+            updateaxis(d3.select("#graph"+k))
+            names_dict[graph_names[k]].shift()
+            }
+        }
+
             renderGraph(d3.select("#graph"+j), names_dict[graph_names[j]])
         }
    }

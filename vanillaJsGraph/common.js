@@ -1,19 +1,23 @@
 // Define some UI constants
-const margin = 100; // https://observablehq.com/@d3/margin-convention
-const width = 500;
-const height = 400;
-const innerWidth = width - margin;
+let margin = 100; // https://observablehq.com/@d3/margin-convention
+let width = 500;
+let height = 400;
+let innerWidth = width - margin;
 const innerHeight = height - margin;
 
 const lineDotColor = "#CC0000";
 
 // Define the axes bounds
-const xAxisMax = 100;
-const yAxisMax = 200;
+//const xAxisMax = 10;
+//const yAxisMax = 200;
+let xAxisMax = 10
+let yAxisMax = 200
+
+
 
 // These scales determine the axes domains and the x & y coordinates they map to
-const xScale = d3.scaleLinear().domain([0, xAxisMax]).range([0, innerWidth]);
-const yScale = d3.scaleLinear().domain([0, yAxisMax]).range([innerHeight, 0]);
+let xScale = d3.scaleLinear().domain([0, xAxisMax]).range([0, innerWidth]);
+let yScale = d3.scaleLinear().domain([0, yAxisMax]).range([innerHeight, 0]);
 
 // fake counter as a timer
 let counter = 0;

@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+    <!--Step 2-->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+<!--Step 2-->
+<svg width="500" height="400"></svg>
+<script>
+        // Step 1
+        let dataset1 = [
+            [1,1], [2,20], [3,36],
+            [4, 50], [5, 70], [6, 100],
+            [7, 106], [8, 123], [9, 130],
+        ];
+
+        // Step 3
+        let svg = d3.select("svg"),
+            margin = 200,
+            width = svg.attr("width") - margin, //300
+            height = svg.attr("height") - margin //200
+            
+        let g = svg.append("g")
+            .attr("class", "axes")
+            .attr("transform", "translate(" + 100 + "," + 100 + ")");
+
+        // Step 5
+        // Title
+        svg.append('text')
+        .attr('x', width/2 + 100)
+        .attr('y', 100)
+        .attr('text-anchor', 'middle')
+        .style('font-family', 'Helvetica')
+        .style('font-size', 20)
+        .text('Line Chart');
+        
+        // X label
+        svg.append('text')
+        .attr('x', width/2 + 100)
+        .attr('y', height - 15 + 150)
+        .attr('text-anchor', 'middle')
+        .style('font-family', 'Helvetica')
+        .style('font-size', 12)
+        .text('Independant');
+        
+        // Y label
+        svg.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('transform', 'translate(60,' + height + ')rotate(-90)')
+        .style('font-family', 'Helvetica')
+        .style('font-size', 12)
+        .text('Dependant');
+
+        function render() {
+          svg.selectAll("g.dot-graph").remove();
+          svg.selectAll("g.axis").remove();
+          svg.selectAll(".line").remove();
+          
+          // Step 4 
+          let xScale = d3.scaleLinear().domain([0, 9+fakeData]).range([0, width]),
+            yScale = d3.scaleLinear().domain([0, 200]).range([height, 0]);
+
+          // Step 6
+          g.append("g")
+          .attr("class", "axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(xScale));
+          
+          g.append("g")
+          .attr("class", "axis")
+          .call(d3.axisLeft(yScale));
+
+
+          // Step 7
+          svg.append('g')
+          .attr('class', 'dot-graph')
+          .selectAll("dot")
+          .data(dataset1)
+          .enter()
+          .append("circle")
+          .attr("cx", function (d) { return xScale(d[0]); } )
+          .attr("cy", function (d) { return yScale(d[1]); } )
+          .attr("r", 3)
+          .attr("transform", "translate(" + 100 + "," + 100 + ")")
+          .style("fill", "#CC0000");
+
+          // Step 8        
+          let line = d3.line()
+          .x(function(d) { return xScale(d[0]); }) 
+          .y(function(d) { return yScale(d[1]); }) 
+          .curve(d3.curveMonotoneX)
+          
+          svg.append("path")
+          .datum(dataset1) 
+          .attr("class", "line") 
+          .attr("transform", "translate(" + 100 + "," + 100 + ")")
+          .attr("d", line)
+          .style("fill", "none")
+          .style("stroke", "#CC0000")
+          .style("stroke-width", "2");
+        }
+
+        let fakeData = 1;
+
+        render();
+
+        setInterval(function(){
+          dataset1.push([fakeData+9, 130+fakeData])
+          fakeData++;
+          render();
+        }, 1500);
+</script>
+</body>
+</html>

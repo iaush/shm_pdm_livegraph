@@ -8,10 +8,10 @@ const innerHeight = height - margin;
 const lineDotColor = "#CC0056";
 
 // Define the axes bounds
-const xAxisMax = 300;
-const yAxisMax = 400;
+let xAxisMax = 30;
+let yAxisMax = 400;
 
 //scales determine the axes domains and the x & y coordinates they map to
-const xScale = d3.scaleLinear().domain([0, xAxisMax]).range([0, innerWidth]);
-const yScale = d3.scaleLinear().domain([0, yAxisMax]).range([innerHeight, 0]);
+let xScale = d3.scaleLinear().domain([0, xAxisMax]).range([0, innerWidth]);
+let yScale = d3.scaleLinear().domain([0, yAxisMax]).range([innerHeight, 0]);
 

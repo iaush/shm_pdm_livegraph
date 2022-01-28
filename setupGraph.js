@@ -41,3 +41,21 @@ function setupGraph(graph, title, xlabel, ylabel) {
 
   axesContainer.append("g").attr("class", "axis").call(d3.axisLeft(yScale));
 }
+
+
+function updateaxis(graph) {
+
+  graph.selectAll("g.axis").remove();
+
+  let axesContainer = graph.append("g")
+    .attr("class", "axesContainer")
+    .attr("transform", "translate(" + margin / 2 + "," + margin / 2 + ")");
+
+  axesContainer
+    .append("g")
+    .attr("class", "axis")
+    .attr("transform", `translate(0,${innerHeight})`)
+    .call(d3.axisBottom(xScale));
+
+  axesContainer.append("g").attr("class", "axis").call(d3.axisLeft(yScale));
+}

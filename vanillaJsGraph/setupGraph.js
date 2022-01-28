@@ -28,11 +28,30 @@ function setupGraph(graph, title, xlabel, ylabel) {
     .text(ylabel);
 
   // Create an element to hold the axes 
-  const axesContainer = graph.append("g")
+  let axesContainer = graph.append("g")
     .attr("class", "axesContainer")
     .attr("transform", "translate(" + margin / 2 + "," + margin / 2 + ")");
 
   // Draw the x and y axes
+  axesContainer
+    .append("g")
+    .attr("class", "axis")
+    .attr("transform", `translate(0,${innerHeight})`)
+    .call(d3.axisBottom(xScale));
+
+  axesContainer.append("g").attr("class", "axis").call(d3.axisLeft(yScale));
+
+}
+
+
+function updateaxis(graph) {
+
+  graph.selectAll("g.axis").remove();
+
+  let axesContainer = graph.append("g")
+    .attr("class", "axesContainer")
+    .attr("transform", "translate(" + margin / 2 + "," + margin / 2 + ")");
+
   axesContainer
     .append("g")
     .attr("class", "axis")

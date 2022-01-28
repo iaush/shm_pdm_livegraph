@@ -1,4 +1,5 @@
 function renderGraph(graph, dataset) {
+ 
   // remove previous dots and lines so that you can redraw
   graph.selectAll("g.dot-graph").remove();
   graph.selectAll(".line").remove();
